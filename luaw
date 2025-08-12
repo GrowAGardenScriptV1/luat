@@ -1,11 +1,16 @@
---// UI Design Only - No Scam Functions
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "TradeScamDesign"
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+--// UI Design Only - Safe Toggle Version
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 
+-- ScreenGui
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "TradeOptionsUI"
+ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+-- Frame (moved to upper left)
 local Frame = Instance.new("Frame")
 Frame.Size = UDim2.new(0, 200, 0, 150)
-Frame.Position = UDim2.new(0.5, -100, 0.5, -75)
+Frame.Position = UDim2.new(0, 10, 0, 10) -- upper left
 Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 Frame.Parent = ScreenGui
 
@@ -13,15 +18,17 @@ local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 6)
 UICorner.Parent = Frame
 
+-- Title
 local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1, 0, 0, 30)
 Title.BackgroundTransparency = 1
-Title.Text = "Trade Scam"
+Title.Text = "Trade Options"
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 18
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.Parent = Frame
 
+-- Function to create a functional toggle
 local function createToggle(yPos, text)
     local ToggleFrame = Instance.new("Frame")
     ToggleFrame.Size = UDim2.new(1, -10, 0, 30)
@@ -43,14 +50,31 @@ local function createToggle(yPos, text)
     Button.Size = UDim2.new(0.3, -5, 0.8, 0)
     Button.Position = UDim2.new(0.7, 5, 0.1, 0)
     Button.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-    Button.Text = ""
+    Button.Text = "OFF"
+    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Button.Font = Enum.Font.GothamBold
+    Button.TextSize = 12
     Button.Parent = ToggleFrame
 
     local BtnCorner = Instance.new("UICorner")
     BtnCorner.CornerRadius = UDim.new(1, 0)
     BtnCorner.Parent = Button
+
+    -- Toggle functionality
+    local isOn = false
+    Button.MouseButton1Click:Connect(function()
+        isOn = not isOn
+        if isOn then
+            Button.BackgroundColor3 = Color3.fromRGB(0, 170, 0) -- Green ON
+            Button.Text = "ON"
+        else
+            Button.BackgroundColor3 = Color3.fromRGB(170, 0, 0) -- Red OFF
+            Button.Text = "OFF"
+        end
+    end)
 end
 
+-- Create toggles
 createToggle(40, "Freeze Trade")
 createToggle(75, "Auto Accept")
 createToggle(110, "Auto Add Items")
